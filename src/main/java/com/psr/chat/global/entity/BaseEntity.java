@@ -3,14 +3,13 @@ package com.psr.chat.global.entity;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -22,17 +21,5 @@ public class BaseEntity {
     @Setter
     @Column(nullable = false, columnDefinition = "varchar(10) default 'active'")
     private String status;
-
-    @PrePersist
-    public void prePersist() {
-        LocalDateTime now = LocalDateTime.now();
-        createdAt = now;
-        updateAt = now;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        updateAt = LocalDateTime.now();
-    }
 
 }
